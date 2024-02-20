@@ -403,7 +403,7 @@ pick_solution &lt;- function(solution_list, word_length = 5) {
 # 4.Use
 solution_custom_length &lt;- pick_solution(solution_list, word_length = 6)
 print(paste(&quot;Custom length (word_length = 6):&quot;, paste(solution_custom_length, collapse = &quot;&quot;)))</code></pre>
-<pre><code>## [1] &quot;Custom length (word_length = 6): PICKUP&quot;</code></pre>
+<pre><code>## [1] &quot;Custom length (word_length = 6): TALENT&quot;</code></pre>
 <p><strong>Step 4: create two more functions</strong></p>
 <pre class="r"><code>evaluate_guess &lt;- function(guess, solution) {
   feedback &lt;- character(length(solution))
@@ -468,7 +468,7 @@ play_wordle &lt;- function(solution, num_guesses = 6) {
 # Set the solution
 solution &lt;- paste(solution_custom_length, collapse = &quot;&quot;)
 solution</code></pre>
-<pre><code>## [1] &quot;PICKUP&quot;</code></pre>
+<pre><code>## [1] &quot;TALENT&quot;</code></pre>
 <pre class="r"><code># Start the game
 play_wordle(solution)</code></pre>
 <pre><code>## Welcome to Wordle!
@@ -492,7 +492,7 @@ play_wordle(solution)</code></pre>
 ## Enter guess number 6 : 
 ## Invalid guess. Please enter a valid word of the correct length.
 ## Sorry, you LOST the game.
-## Solution: PICKUP 
+## Solution: TALENT 
 ## Guess and Feedback History:
 ##   guess feedback
 ## 1               
