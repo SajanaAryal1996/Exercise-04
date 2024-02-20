@@ -62,19 +62,22 @@ print(paste("Custom length (word_length = 6):", paste(solution_custom_length, co
 ```{r}
 evaluate_guess <- function(guess, solution) {
   feedback <- character(length(solution))
+  
   for (i in seq_along(solution)) {
     if (is.na(guess[i]) || is.na(solution[i])) {
       feedback[i] <- " "
     } else if (guess[i] == solution[i]) {
       feedback[i] <- "*"
-    } else if (guess[i] %in% solution) {
+    } else if (guess[i] %in% solution & guess[i] != solution[i]) {
       feedback[i] <- "+"
     } else {
       feedback[i] <- "-"
     }
   }
-  return(feedback)
+  
+  return(paste(feedback, collapse = ""))
 }
+
 
 play_wordle <- function(solution, num_guesses = 6) {
   alphabet <- LETTERS
@@ -90,15 +93,16 @@ play_wordle <- function(solution, num_guesses = 6) {
 
     if (!(all(grepl("^[A-Z]*$", guess)) && nchar(guess) == nchar(solution))) {
       cat("Invalid guess. Please enter a valid word of the correct length.\n")
-      guess_num <- guess_num - 1
-    }
+      guess_num <- guess_num -1
+      next
+  }
 
     feedback <- evaluate_guess(guess, solution)
     remaining_letters <- setdiff(remaining_letters, strsplit(guess, NULL)[[1]])
     feedback_history[guess_num, ] <- list(guess = guess, feedback = paste(feedback, collapse = ""))
 
     # Display feedback
-    display_feedback <- paste(ifelse(feedback == "*", "\033[1;32m", ifelse(feedback == "+", "\033[1;33m", "\033[1;31m")), feedback, "\033[0m", sep = "")
+    display_feedback <- paste(ifelse(feedback == "*", "\033[1;32m", ifelse(feedback     == "+", "\033[1;33m", "\033[1;31m")), feedback, "\033[0m", sep = "")
     cat("Feedback:", display_feedback, "\n")
 
     if (all(feedback == "*")) {
@@ -122,6 +126,7 @@ solution
 
 # Start the game
 play_wordle(solution)
+
 ```
 
 ```{r}

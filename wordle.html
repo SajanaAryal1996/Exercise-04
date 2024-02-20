@@ -403,23 +403,26 @@ pick_solution &lt;- function(solution_list, word_length = 5) {
 # 4.Use
 solution_custom_length &lt;- pick_solution(solution_list, word_length = 6)
 print(paste(&quot;Custom length (word_length = 6):&quot;, paste(solution_custom_length, collapse = &quot;&quot;)))</code></pre>
-<pre><code>## [1] &quot;Custom length (word_length = 6): CHOSEN&quot;</code></pre>
+<pre><code>## [1] &quot;Custom length (word_length = 6): PICKUP&quot;</code></pre>
 <p><strong>Step 4: create two more functions</strong></p>
 <pre class="r"><code>evaluate_guess &lt;- function(guess, solution) {
   feedback &lt;- character(length(solution))
+  
   for (i in seq_along(solution)) {
     if (is.na(guess[i]) || is.na(solution[i])) {
       feedback[i] &lt;- &quot; &quot;
     } else if (guess[i] == solution[i]) {
       feedback[i] &lt;- &quot;*&quot;
-    } else if (guess[i] %in% solution) {
+    } else if (guess[i] %in% solution &amp; guess[i] != solution[i]) {
       feedback[i] &lt;- &quot;+&quot;
     } else {
       feedback[i] &lt;- &quot;-&quot;
     }
   }
-  return(feedback)
+  
+  return(paste(feedback, collapse = &quot;&quot;))
 }
+
 
 play_wordle &lt;- function(solution, num_guesses = 6) {
   alphabet &lt;- LETTERS
@@ -435,15 +438,16 @@ play_wordle &lt;- function(solution, num_guesses = 6) {
 
     if (!(all(grepl(&quot;^[A-Z]*$&quot;, guess)) &amp;&amp; nchar(guess) == nchar(solution))) {
       cat(&quot;Invalid guess. Please enter a valid word of the correct length.\n&quot;)
-      guess_num &lt;- guess_num - 1
-    }
+      guess_num &lt;- guess_num -1
+      next
+  }
 
     feedback &lt;- evaluate_guess(guess, solution)
     remaining_letters &lt;- setdiff(remaining_letters, strsplit(guess, NULL)[[1]])
     feedback_history[guess_num, ] &lt;- list(guess = guess, feedback = paste(feedback, collapse = &quot;&quot;))
 
     # Display feedback
-    display_feedback &lt;- paste(ifelse(feedback == &quot;*&quot;, &quot;\033[1;32m&quot;, ifelse(feedback == &quot;+&quot;, &quot;\033[1;33m&quot;, &quot;\033[1;31m&quot;)), feedback, &quot;\033[0m&quot;, sep = &quot;&quot;)
+    display_feedback &lt;- paste(ifelse(feedback == &quot;*&quot;, &quot;\033[1;32m&quot;, ifelse(feedback     == &quot;+&quot;, &quot;\033[1;33m&quot;, &quot;\033[1;31m&quot;)), feedback, &quot;\033[0m&quot;, sep = &quot;&quot;)
     cat(&quot;Feedback:&quot;, display_feedback, &quot;\n&quot;)
 
     if (all(feedback == &quot;*&quot;)) {
@@ -464,7 +468,7 @@ play_wordle &lt;- function(solution, num_guesses = 6) {
 # Set the solution
 solution &lt;- paste(solution_custom_length, collapse = &quot;&quot;)
 solution</code></pre>
-<pre><code>## [1] &quot;CHOSEN&quot;</code></pre>
+<pre><code>## [1] &quot;PICKUP&quot;</code></pre>
 <pre class="r"><code># Start the game
 play_wordle(solution)</code></pre>
 <pre><code>## Welcome to Wordle!
@@ -472,36 +476,30 @@ play_wordle(solution)</code></pre>
 ## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
 ## Enter guess number 1 : 
 ## Invalid guess. Please enter a valid word of the correct length.
-## Feedback: [1;31m-[0m 
 ## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
 ## Enter guess number 2 : 
 ## Invalid guess. Please enter a valid word of the correct length.
-## Feedback: [1;31m-[0m 
 ## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
 ## Enter guess number 3 : 
 ## Invalid guess. Please enter a valid word of the correct length.
-## Feedback: [1;31m-[0m 
 ## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
 ## Enter guess number 4 : 
 ## Invalid guess. Please enter a valid word of the correct length.
-## Feedback: [1;31m-[0m 
 ## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
 ## Enter guess number 5 : 
 ## Invalid guess. Please enter a valid word of the correct length.
-## Feedback: [1;31m-[0m 
 ## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
 ## Enter guess number 6 : 
 ## Invalid guess. Please enter a valid word of the correct length.
-## Feedback: [1;31m-[0m 
 ## Sorry, you LOST the game.
-## Solution: CHOSEN 
+## Solution: PICKUP 
 ## Guess and Feedback History:
 ##   guess feedback
-## 1              -
-## 2              -
-## 3              -
-## 4              -
-## 5              -
+## 1               
+## 2               
+## 3               
+## 4               
+## 5               
 ## 6</code></pre>
 <pre class="r"><code>knitr::opts_chunk$set(echo = TRUE)</code></pre>
 
