@@ -1,0 +1,129 @@
+---
+title: "wordle.rmd"
+output:
+html_document: default
+---
+
+**Step 1. Create your own custom function**
+
+```{r}
+load_dictionary <- function(filename) {
+  words <- readLines(filename)
+  return(words)
+}
+f1 <- "https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/collins-scrabble-words-2019.txt"
+f2 <- "https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/google-10000-english-usa-no-swears.txt"
+valid_list <- load_dictionary(f1)
+solution_list <- load_dictionary(f2)
+str(valid_list)
+str(solution_list)
+```
+
+**Step 2.Winnow your variable solution_list to only include words that are included in valid_list**
+
+```{r}
+load_dictionary <- function(filename) {
+  words <- readLines(filename)
+  return(words)
+}
+valid_list <- load_dictionary(f1)
+solution_list <- load_dictionary(f2)
+updated_solution_list <- intersect(solution_list, valid_list)
+num_words_updated_solution_list <- length(updated_solution_list)
+print(num_words_updated_solution_list)
+```
+
+**There are 8337 words in updated solution_list vector.**
+
+**Step 3:Write a custom function called `pick_solution()`**
+
+```{r}
+#1.Write pick_solution function
+pick_solution <- function(solution_list, word_length = 5) {
+  #Remove words not of the specified length
+  valid_length_words <- solution_list[nchar(solution_list) == word_length]
+  #Check if there are words of the specified length
+  if (length(valid_length_words) == 0) {
+    stop("No words of the specified length found in solution_list.")
+  }
+  #2.Randomly choose a word from filtered list
+  chosen_word <- sample(valid_length_words, 1)
+  #3.Split the chosen word into a vector of single-character elements
+  split_word <- strsplit(chosen_word, NULL)[[1]]
+  return(split_word)
+}
+# 4.Use
+solution_custom_length <- pick_solution(solution_list, word_length = 6)
+print(paste("Custom length (word_length = 6):", paste(solution_custom_length, collapse = "")))
+```
+
+**Step 4: create two more functions**
+
+```{r}
+evaluate_guess <- function(guess, solution) {
+  feedback <- character(length(solution))
+  for (i in seq_along(solution)) {
+    if (is.na(guess[i]) || is.na(solution[i])) {
+      feedback[i] <- " "
+    } else if (guess[i] == solution[i]) {
+      feedback[i] <- "*"
+    } else if (guess[i] %in% solution) {
+      feedback[i] <- "+"
+    } else {
+      feedback[i] <- "-"
+    }
+  }
+  return(feedback)
+}
+
+play_wordle <- function(solution, num_guesses = 6) {
+  alphabet <- LETTERS
+  remaining_letters <- alphabet
+  feedback_history <- data.frame(guess = character(num_guesses), feedback = character(num_guesses))
+
+  cat("Welcome to Wordle!\n")
+  cat("You have", num_guesses, "chances to guess a word of length", nchar(solution), "\n")
+
+  for (guess_num in 1:num_guesses) {
+    cat("Letters left:", paste(remaining_letters, collapse = " "), "\n")
+    guess <- toupper(readline(paste("Enter guess number", guess_num, ": ")))
+
+    if (!(all(grepl("^[A-Z]*$", guess)) && nchar(guess) == nchar(solution))) {
+      cat("Invalid guess. Please enter a valid word of the correct length.\n")
+      guess_num <- guess_num - 1
+    }
+
+    feedback <- evaluate_guess(guess, solution)
+    remaining_letters <- setdiff(remaining_letters, strsplit(guess, NULL)[[1]])
+    feedback_history[guess_num, ] <- list(guess = guess, feedback = paste(feedback, collapse = ""))
+
+    # Display feedback
+    display_feedback <- paste(ifelse(feedback == "*", "\033[1;32m", ifelse(feedback == "+", "\033[1;33m", "\033[1;31m")), feedback, "\033[0m", sep = "")
+    cat("Feedback:", display_feedback, "\n")
+
+    if (all(feedback == "*")) {
+      cat("Congratulations! You WON!\n")
+      cat("Solution:", paste(solution, collapse = ""), "\n")
+      cat("Guess and Feedback History:\n")
+      print(feedback_history[1:guess_num, ])
+      return(invisible())
+    }
+  }
+
+  cat("Sorry, you LOST the game.\n")
+  cat("Solution:", paste(solution, collapse = ""), "\n")
+  cat("Guess and Feedback History:\n")
+  print(feedback_history)
+}
+
+# Set the solution
+solution <- paste(solution_custom_length, collapse = "")
+solution
+
+# Start the game
+play_wordle(solution)
+```
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+```
