@@ -9,12 +9,6 @@ output:
     toc_depth: '2'
 ---
 
-```{r,  warning=FALSE, eval=FALSE}
-library(dplyr)
-library(tidyverse)
-library(ggplot2)
-```
-
 **Step 1. Create your own custom function**
 
 ```{r}
