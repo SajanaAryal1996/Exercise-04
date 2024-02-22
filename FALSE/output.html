@@ -11,7 +11,7 @@
 
 
 
-<title>wordle.rmd</title>
+<title>Wordle.rmd</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,7 +348,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">wordle.rmd</h1>
+<h1 class="title toc-ignore">Wordle.rmd</h1>
 
 </div>
 
@@ -365,9 +365,9 @@ valid_list &lt;- load_dictionary(f1)</code></pre>
 ## &#39;https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/collins-scrabble-words-2019.txt&#39;</code></pre>
 <pre class="r"><code>solution_list &lt;- load_dictionary(f2)
 str(valid_list)</code></pre>
-<pre><code>##  chr [1:279497] &quot;words&quot; &quot;AA&quot; &quot;AAH&quot; &quot;AAHED&quot; &quot;AAHING&quot; &quot;AAHS&quot; &quot;AAL&quot; &quot;AALII&quot; ...</code></pre>
+<pre><code>##  chr [1:279497] &quot;words&quot; &quot;AA&quot; &quot;AAH&quot; &quot;AAHED&quot; &quot;AAHING&quot; &quot;AAHS&quot; &quot;AAL&quot; &quot;AALII&quot; &quot;AALIIS&quot; &quot;AALS&quot; &quot;AARDVARK&quot; ...</code></pre>
 <pre class="r"><code>str(solution_list)</code></pre>
-<pre><code>##  chr [1:9885] &quot;words&quot; &quot;THE&quot; &quot;OF&quot; &quot;AND&quot; &quot;TO&quot; &quot;A&quot; &quot;IN&quot; &quot;FOR&quot; &quot;IS&quot; &quot;ON&quot; &quot;THAT&quot; ...</code></pre>
+<pre><code>##  chr [1:9885] &quot;words&quot; &quot;THE&quot; &quot;OF&quot; &quot;AND&quot; &quot;TO&quot; &quot;A&quot; &quot;IN&quot; &quot;FOR&quot; &quot;IS&quot; &quot;ON&quot; &quot;THAT&quot; &quot;BY&quot; &quot;THIS&quot; &quot;WITH&quot; &quot;I&quot; ...</code></pre>
 <p><strong>Step 2.Winnow your variable solution_list to only include
 words that are included in valid_list</strong></p>
 <pre class="r"><code>load_dictionary &lt;- function(filename) {
@@ -401,107 +401,107 @@ pick_solution &lt;- function(solution_list, word_length = 5) {
   return(split_word)
 }
 # 4.Use
-solution_custom_length &lt;- pick_solution(solution_list, word_length = 6)
-print(paste(&quot;Custom length (word_length = 6):&quot;, paste(solution_custom_length, collapse = &quot;&quot;)))</code></pre>
-<pre><code>## [1] &quot;Custom length (word_length = 6): TALENT&quot;</code></pre>
-<p><strong>Step 4: create two more functions</strong></p>
-<pre class="r"><code>evaluate_guess &lt;- function(guess, solution) {
-  feedback &lt;- character(length(solution))
-  
-  for (i in seq_along(solution)) {
-    if (is.na(guess[i]) || is.na(solution[i])) {
-      feedback[i] &lt;- &quot; &quot;
-    } else if (guess[i] == solution[i]) {
-      feedback[i] &lt;- &quot;*&quot;
-    } else if (guess[i] %in% solution &amp; guess[i] != solution[i]) {
-      feedback[i] &lt;- &quot;+&quot;
-    } else {
-      feedback[i] &lt;- &quot;-&quot;
-    }
-  }
-  
-  return(paste(feedback, collapse = &quot;&quot;))
-}
-
-
-play_wordle &lt;- function(solution, num_guesses = 6) {
-  alphabet &lt;- LETTERS
-  remaining_letters &lt;- alphabet
-  feedback_history &lt;- data.frame(guess = character(num_guesses), feedback = character(num_guesses))
-
-  cat(&quot;Welcome to Wordle!\n&quot;)
-  cat(&quot;You have&quot;, num_guesses, &quot;chances to guess a word of length&quot;, nchar(solution), &quot;\n&quot;)
-
-  for (guess_num in 1:num_guesses) {
-    cat(&quot;Letters left:&quot;, paste(remaining_letters, collapse = &quot; &quot;), &quot;\n&quot;)
-    guess &lt;- toupper(readline(paste(&quot;Enter guess number&quot;, guess_num, &quot;: &quot;)))
-
-    if (!(all(grepl(&quot;^[A-Z]*$&quot;, guess)) &amp;&amp; nchar(guess) == nchar(solution))) {
-      cat(&quot;Invalid guess. Please enter a valid word of the correct length.\n&quot;)
-      guess_num &lt;- guess_num -1
-      next
-  }
-
-    feedback &lt;- evaluate_guess(guess, solution)
-    remaining_letters &lt;- setdiff(remaining_letters, strsplit(guess, NULL)[[1]])
-    feedback_history[guess_num, ] &lt;- list(guess = guess, feedback = paste(feedback, collapse = &quot;&quot;))
-
-    # Display feedback
-    display_feedback &lt;- paste(ifelse(feedback == &quot;*&quot;, &quot;\033[1;32m&quot;, ifelse(feedback     == &quot;+&quot;, &quot;\033[1;33m&quot;, &quot;\033[1;31m&quot;)), feedback, &quot;\033[0m&quot;, sep = &quot;&quot;)
-    cat(&quot;Feedback:&quot;, display_feedback, &quot;\n&quot;)
-
-    if (all(feedback == &quot;*&quot;)) {
-      cat(&quot;Congratulations! You WON!\n&quot;)
-      cat(&quot;Solution:&quot;, paste(solution, collapse = &quot;&quot;), &quot;\n&quot;)
-      cat(&quot;Guess and Feedback History:\n&quot;)
-      print(feedback_history[1:guess_num, ])
-      return(invisible())
-    }
-  }
-
-  cat(&quot;Sorry, you LOST the game.\n&quot;)
-  cat(&quot;Solution:&quot;, paste(solution, collapse = &quot;&quot;), &quot;\n&quot;)
-  cat(&quot;Guess and Feedback History:\n&quot;)
-  print(feedback_history)
-}
-
-# Set the solution
-solution &lt;- paste(solution_custom_length, collapse = &quot;&quot;)
+solution &lt;- pick_solution(solution_list, word_length = 6)
 solution</code></pre>
-<pre><code>## [1] &quot;TALENT&quot;</code></pre>
-<pre class="r"><code># Start the game
-play_wordle(solution)</code></pre>
-<pre><code>## Welcome to Wordle!
-## You have 6 chances to guess a word of length 6 
+<pre><code>## [1] &quot;A&quot; &quot;C&quot; &quot;C&quot; &quot;E&quot; &quot;P&quot; &quot;T&quot;</code></pre>
+<p><strong>Step 4: create two more functions and play
+wordle</strong></p>
+<pre class="r"><code>evaluateGuess &lt;- function(guessVec, answerVec) {
+  wordLength &lt;- length(answerVec)
+ 
+  resVec &lt;- rep(&quot;-&quot;, wordLength)
+ 
+   # first pass: * for in the word and in the correct position
+  for (i in 1:wordLength) {
+    if (guessVec[i] == answerVec[i]) {
+      resVec[i] &lt;- &quot;*&quot;
+      answerVec[i] &lt;- &quot;-&quot;  # mark unavailable 
+    }
+  }
+   
+  # second pass: + for in the word but in the wrong position
+  for (i in 1:wordLength) {
+    if (resVec[i] != &quot;+&quot;) {
+      idx &lt;- match(guessVec[i], answerVec)
+      if (!is.na(idx)) {
+        resVec[i] &lt;- &quot;+&quot;
+        answerVec[idx] &lt;- &quot;-&quot; # mark - for unavailable
+      }
+    }
+  }
+   
+  resVec
+}
+
+playGame &lt;- function(dictionary, wordLength = 6, nGuesses = 6) {
+  # select an answer
+  possibleAnswers &lt;- dictionary[nchar(dictionary) == wordLength]
+  answer &lt;- sample(possibleAnswers, 1)
+  answerVec &lt;- strsplit(answer, &quot;&quot;)[[1]]
+   
+  cat(paste(&quot;You have&quot;, nGuesses, &quot;chances to guess a word of length&quot;, wordLength), &quot;\n&quot;)
+   
+  guessCnt &lt;- 0
+  lettersLeft &lt;- LETTERS
+  while (guessCnt &lt; nGuesses) {
+    # display &quot;keyboard&quot;
+    cat(paste(c(&quot;Letters left:&quot;, lettersLeft), collapse = &quot; &quot;), &quot;\n&quot;)
+     
+    # read in guess
+    guessCnt &lt;- guessCnt + 1
+    guess &lt;- readline(paste0(&quot;Enter guess &quot;, guessCnt, &quot;: &quot;))
+    while (nchar(guess) != wordLength) {
+      guess &lt;- readline(paste0(&quot;Guess must have &quot;, wordLength, &quot; characters: &quot;))
+    }
+    guess &lt;- toupper(guess)
+    guessVec &lt;- strsplit(guess, &quot;&quot;)[[1]]
+     
+    # evaluate guess and update keyboard
+    resVec &lt;- evaluateGuess(guessVec, answerVec)
+     
+    # update keyboard
+    lettersLeft &lt;- setdiff(lettersLeft, guessVec)
+     
+    # print result
+    cat(paste(strsplit(guess, &quot;&quot;)[[1]], collapse = &quot; &quot;), &quot;\n&quot;)
+    cat(paste(resVec, collapse = &quot; &quot;), &quot;\n&quot;)
+    if (all(resVec == &quot;G&quot;)) {
+      cat(&quot;You won!\n&quot;)
+      return(guessCnt)
+    }
+  }
+  cat(paste(&quot;Sorry, you lost! Answer was &quot;, answer), &quot;\n&quot;)
+  return(guessCnt)
+}
+
+# Load the dictionary
+dictionary &lt;- read.csv(&quot;https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/collins-scrabble-words-2019.txt&quot;, header = FALSE, skip = 2)[, 1]
+
+# Uncomment the following line if you want to use a different dictionary
+# dictionary &lt;- read.csv(&quot;https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/google-10000-english-usa-no-swears.txt&quot;, head = FALSE)[, 1]
+
+playGame(dictionary)</code></pre>
+<pre><code>## You have 6 chances to guess a word of length 6 
 ## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
-## Enter guess number 1 : 
-## Invalid guess. Please enter a valid word of the correct length.
-## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
-## Enter guess number 2 : 
-## Invalid guess. Please enter a valid word of the correct length.
-## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
-## Enter guess number 3 : 
-## Invalid guess. Please enter a valid word of the correct length.
-## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
-## Enter guess number 4 : 
-## Invalid guess. Please enter a valid word of the correct length.
-## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
-## Enter guess number 5 : 
-## Invalid guess. Please enter a valid word of the correct length.
-## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
-## Enter guess number 6 : 
-## Invalid guess. Please enter a valid word of the correct length.
-## Sorry, you LOST the game.
-## Solution: TALENT 
-## Guess and Feedback History:
-##   guess feedback
-## 1               
-## 2               
-## 3               
-## 4               
-## 5               
-## 6</code></pre>
-<pre class="r"><code>knitr::opts_chunk$set(echo = TRUE)</code></pre>
+## B A N A N A 
+## - - + - - - 
+## Letters left: C D E F G H I J K L M O P Q R S T U V W X Y Z 
+## T A N A N A 
+## + - + - - - 
+## Letters left: C D E F G H I J K L M O P Q R S U V W X Y Z 
+## S A J A N A 
+## - - - - + - 
+## Letters left: C D E F G H I K L M O P Q R U V W X Y Z 
+## M A N A N A 
+## - - + - - - 
+## Letters left: C D E F G H I K L O P Q R U V W X Y Z 
+## T A N A N A 
+## + - + - - - 
+## Letters left: C D E F G H I K L O P Q R U V W X Y Z 
+## M A B A N A 
+## - - - - + - 
+## Sorry, you lost! Answer was  INTORT</code></pre>
+<pre><code>## [1] 6</code></pre>
 
 
 

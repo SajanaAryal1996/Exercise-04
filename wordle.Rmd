@@ -1,9 +1,12 @@
 ---
-title: "Wordle game"
-output: 
-  html_document: 
+title: "Wordle.rmd"
+output:
+  html_document:
     toc: true
     toc_depth: 2
+  pdf_document:
+    toc: true
+    toc_depth: '2'
 ---
 
 **Step 1. Create your own custom function**
@@ -88,7 +91,7 @@ evaluateGuess <- function(guessVec, answerVec) {
    
   resVec
 }
-  playGame <- function(solution, wordLength = 6, nGuesses = 6) {
+  playGame <- function(dictionary, wordLength = 6, nGuesses = 6) {
  
    # select an answer
   possibleAnswers <- dictionary[nchar(dictionary) == wordLength]
@@ -140,8 +143,6 @@ playGame(dictionary)
 
 ```
 
-```{r setup, include = FALSE}
-# Set GitHub PAT in the environment
-Sys.setenv(GITHUB_PAT = "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")
-
+```{r}
+rmarkdown::render("Wordle.Rmd", output_format = "html_document", output_file = "output.html", "FALSE")
 ```
