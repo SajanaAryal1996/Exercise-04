@@ -403,7 +403,7 @@ pick_solution &lt;- function(solution_list, word_length = 5) {
 # 4.Use
 solution &lt;- pick_solution(solution_list, word_length = 6)
 solution</code></pre>
-<pre><code>## [1] &quot;A&quot; &quot;C&quot; &quot;C&quot; &quot;E&quot; &quot;P&quot; &quot;T&quot;</code></pre>
+<pre><code>## [1] &quot;B&quot; &quot;U&quot; &quot;T&quot; &quot;T&quot; &quot;O&quot; &quot;N&quot;</code></pre>
 <p><strong>Step 4: create two more functions and play
 wordle</strong></p>
 <pre class="r"><code>evaluateGuess &lt;- function(guessVec, answerVec) {
@@ -432,20 +432,21 @@ wordle</strong></p>
    
   resVec
 }
-
-playGame &lt;- function(dictionary, wordLength = 6, nGuesses = 6) {
-  # select an answer
+  playGame &lt;- function(dictionary, wordLength = 6, nGuesses = 6) {
+ 
+   # select an answer
   possibleAnswers &lt;- dictionary[nchar(dictionary) == wordLength]
   answer &lt;- sample(possibleAnswers, 1)
   answerVec &lt;- strsplit(answer, &quot;&quot;)[[1]]
    
-  cat(paste(&quot;You have&quot;, nGuesses, &quot;chances to guess a word of length&quot;, wordLength), &quot;\n&quot;)
+  print(paste(&quot;You have&quot;, nGuesses, &quot;chances to guess a word of length&quot;, 
+              wordLength))
    
   guessCnt &lt;- 0
   lettersLeft &lt;- LETTERS
   while (guessCnt &lt; nGuesses) {
     # display &quot;keyboard&quot;
-    cat(paste(c(&quot;Letters left:&quot;, lettersLeft), collapse = &quot; &quot;), &quot;\n&quot;)
+    print(paste(c(&quot;Letters left:&quot;, lettersLeft), collapse = &quot; &quot;))
      
     # read in guess
     guessCnt &lt;- guessCnt + 1
@@ -463,45 +464,75 @@ playGame &lt;- function(dictionary, wordLength = 6, nGuesses = 6) {
     lettersLeft &lt;- setdiff(lettersLeft, guessVec)
      
     # print result
-    cat(paste(strsplit(guess, &quot;&quot;)[[1]], collapse = &quot; &quot;), &quot;\n&quot;)
-    cat(paste(resVec, collapse = &quot; &quot;), &quot;\n&quot;)
+    print(paste(strsplit(guess, &quot;&quot;)[[1]], collapse = &quot; &quot;))
+    print(paste(resVec, collapse = &quot; &quot;))
     if (all(resVec == &quot;G&quot;)) {
-      cat(&quot;You won!\n&quot;)
+      print(&quot;You won!&quot;)
       return(guessCnt)
     }
   }
-  cat(paste(&quot;Sorry, you lost! Answer was &quot;, answer), &quot;\n&quot;)
+  print(paste(&quot;Sorry, you lost! Answer was &quot;, answer))
   return(guessCnt)
 }
 
-# Load the dictionary
-dictionary &lt;- read.csv(&quot;https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/collins-scrabble-words-2019.txt&quot;, header = FALSE, skip = 2)[, 1]
-
-# Uncomment the following line if you want to use a different dictionary
-# dictionary &lt;- read.csv(&quot;https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/google-10000-english-usa-no-swears.txt&quot;, head = FALSE)[, 1]
-
+#play game
+  dictionary &lt;- read.csv(&quot;https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/collins-scrabble-words-2019.txt&quot;, header = FALSE, skip = 2)[, 1]
+  
+  dictionary &lt;- read.csv(&quot;https://raw.githubusercontent.com/difiore/ada-2024-datasets/main/google-10000-english-usa-no-swears.txt&quot;,head = FALSE)[, 1]
+  
 playGame(dictionary)</code></pre>
-<pre><code>## You have 6 chances to guess a word of length 6 
-## Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
-## B A N A N A 
-## - - + - - - 
-## Letters left: C D E F G H I J K L M O P Q R S T U V W X Y Z 
-## T A N A N A 
-## + - + - - - 
-## Letters left: C D E F G H I J K L M O P Q R S U V W X Y Z 
-## S A J A N A 
-## - - - - + - 
-## Letters left: C D E F G H I K L M O P Q R U V W X Y Z 
-## M A N A N A 
-## - - + - - - 
-## Letters left: C D E F G H I K L O P Q R U V W X Y Z 
-## T A N A N A 
-## + - + - - - 
-## Letters left: C D E F G H I K L O P Q R U V W X Y Z 
-## M A B A N A 
-## - - - - + - 
-## Sorry, you lost! Answer was  INTORT</code></pre>
+<pre><code>## [1] &quot;You have 6 chances to guess a word of length 6&quot;
+## [1] &quot;Letters left: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z&quot;
+## [1] &quot;T A N A N A&quot;
+## [1] &quot;- + + - - -&quot;
+## [1] &quot;Letters left: B C D E F G H I J K L M O P Q R S U V W X Y Z&quot;
+## [1] &quot;B A N A N A&quot;
+## [1] &quot;- + + - - -&quot;
+## [1] &quot;Letters left: C D E F G H I J K L M O P Q R S U V W X Y Z&quot;
+## [1] &quot;S A J A N A&quot;
+## [1] &quot;- + + - + -&quot;
+## [1] &quot;Letters left: C D E F G H I K L M O P Q R U V W X Y Z&quot;
+## [1] &quot;T A N A N A&quot;
+## [1] &quot;- + + - - -&quot;
+## [1] &quot;Letters left: C D E F G H I K L M O P Q R U V W X Y Z&quot;
+## [1] &quot;Z A N A N A&quot;
+## [1] &quot;- + + - - -&quot;
+## [1] &quot;Letters left: C D E F G H I K L M O P Q R U V W X Y&quot;
+## [1] &quot;E R M T E M&quot;
+## [1] &quot;- - - - - -&quot;
+## [1] &quot;Sorry, you lost! Answer was  JULIAN&quot;</code></pre>
 <pre><code>## [1] 6</code></pre>
+<pre class="r"><code>rmarkdown::render(&quot;Wordle.Rmd&quot;, output_format = &quot;html_document&quot;, output_file = &quot;output.html&quot;, &quot;FALSE&quot;)</code></pre>
+<pre><code>## 
+## 
+## processing file: Wordle.Rmd</code></pre>
+<pre><code>## 
+  |                                                                                   
+  |                                                                             |   0%
+  |                                                                                   
+  |........                                                                     |  10%                   
+  |                                                                                   
+  |...............                                                              |  20% [unnamed-chunk-18]
+  |                                                                                   
+  |.......................                                                      |  30%                   
+  |                                                                                   
+  |...............................                                              |  40% [unnamed-chunk-19]
+  |                                                                                   
+  |......................................                                       |  50%                   
+  |                                                                                   
+  |..............................................                               |  60% [unnamed-chunk-20]
+  |                                                                                   
+  |......................................................                       |  70%                   
+  |                                                                                   
+  |..............................................................               |  80% [unnamed-chunk-21]
+  |                                                                                   
+  |.....................................................................        |  90%                   
+  |                                                                                   
+  |.............................................................................| 100% [unnamed-chunk-22]</code></pre>
+<pre><code>## output file: Wordle.knit.md</code></pre>
+<pre><code>## /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/pandoc +RTS -K512m -RTS Wordle.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output pandoc3a63914f5a8.html --lua-filter /Users/sa57824/Library/R/arm64/4.3/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /Users/sa57824/Library/R/arm64/4.3/library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --table-of-contents --toc-depth 2 --template /Users/sa57824/Library/R/arm64/4.3/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable &#39;mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39; --include-in-header /var/folders/sr/p59cj11x08scxc4ng_5yfx3x72rn5k/T//RtmpTZhKLC/rmarkdown-str3a63bd5ea7a.html</code></pre>
+<pre><code>## 
+## Output created: FALSE/output.html</code></pre>
 
 
 

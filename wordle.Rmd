@@ -9,10 +9,10 @@ output:
     toc_depth: '2'
 ---
 
-```{r message = FALSE, warning=FALSE}
-require(dplyr)
-require(tidyverse)
-require(ggplot2)
+```{r,  warning=FALSE, eval=FALSE}
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
 ```
 
 
