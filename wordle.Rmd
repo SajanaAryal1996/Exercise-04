@@ -15,7 +15,6 @@ library(tidyverse)
 library(ggplot2)
 ```
 
-
 **Step 1. Create your own custom function**
 
 ```{r}
@@ -71,7 +70,7 @@ solution
 
 **Step 4: create two more functions and play wordle**
 
-```{r}
+```{r, warning=FALSE, eval=FALSE}
 evaluateGuess <- function(guessVec, answerVec) {
   wordLength <- length(answerVec)
  
