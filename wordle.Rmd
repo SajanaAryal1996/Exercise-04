@@ -125,7 +125,7 @@ evaluateGuess <- function(guessVec, answerVec) {
     # print result
     print(paste(strsplit(guess, "")[[1]], collapse = " "))
     print(paste(resVec, collapse = " "))
-    if (all(resVec == "G")) {
+    if (all(resVec == "*")) {
       print("You won!")
       return(guessCnt)
     }
