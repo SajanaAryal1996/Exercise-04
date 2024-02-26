@@ -403,7 +403,7 @@ pick_solution &lt;- function(solution_list, word_length = 5) {
 # 4.Use
 solution &lt;- pick_solution(solution_list, word_length = 6)
 solution</code></pre>
-<pre><code>## [1] &quot;P&quot; &quot;R&quot; &quot;O&quot; &quot;Z&quot; &quot;A&quot; &quot;C&quot;</code></pre>
+<pre><code>## [1] &quot;W&quot; &quot;E&quot; &quot;E&quot; &quot;K&quot; &quot;L&quot; &quot;Y&quot;</code></pre>
 <p><strong>Step 4: create two more functions and play
 wordle</strong></p>
 <pre class="r"><code>evaluateGuess &lt;- function(guessVec, answerVec) {
@@ -457,17 +457,15 @@ wordle</strong></p>
     guess &lt;- toupper(guess)
     guessVec &lt;- strsplit(guess, &quot;&quot;)[[1]]
      
-    # evaluate guess and update keyboard
+    # evaluate guess 
     resVec &lt;- evaluateGuess(guessVec, answerVec)
-     
-    # update keyboard
     lettersLeft &lt;- setdiff(lettersLeft, guessVec)
      
-    # print result
+    # Display result
     print(paste(strsplit(guess, &quot;&quot;)[[1]], collapse = &quot; &quot;))
     print(paste(resVec, collapse = &quot; &quot;))
     if (all(resVec == &quot;*&quot;)) {
-      print(&quot;You won!&quot;)
+      print(&quot;Congratulations, You won!&quot;)
       return(guessCnt)
     }
   }

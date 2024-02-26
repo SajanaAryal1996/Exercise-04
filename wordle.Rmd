@@ -116,17 +116,15 @@ evaluateGuess <- function(guessVec, answerVec) {
     guess <- toupper(guess)
     guessVec <- strsplit(guess, "")[[1]]
      
-    # evaluate guess and update keyboard
+    # evaluate guess 
     resVec <- evaluateGuess(guessVec, answerVec)
-     
-    # update keyboard
     lettersLeft <- setdiff(lettersLeft, guessVec)
      
-    # print result
+    # Display result
     print(paste(strsplit(guess, "")[[1]], collapse = " "))
     print(paste(resVec, collapse = " "))
     if (all(resVec == "*")) {
-      print("You won!")
+      print("Congratulations, You won!")
       return(guessCnt)
     }
   }
